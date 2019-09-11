@@ -20,21 +20,20 @@ function IsLeapYear($_y){
     return ($_y%400==0||(($_y%4==0)&&($_y%100!==0)));
 }
 // 判斷星期幾
-function WhatWeekday($_y, $_m){
+function WhatWeekday($_y, $_m, $_d){
     // 12月份
     $days=array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
     if(IsLeapYear($_y)){
         $days[1]+=1;
     }
 
-    $whatd = $days[$_m-1];
-    for($i=0; $i<$_m-1; $i++){
+    $whatd = ($_y-1+($_y-1)/4-($_y-1)/100+($_y-1)/400)%7;
+
+    for ($i=0; $i<($_m-1); $i++){
         $whatd += $days[$i];
     }
-    $whatd += $_y + $_y/4 - $_y/100 + $_y/400 - 3;
+    $whatd = ($whatd+1) % 7;
 
-    $whatd += 7; // 避免負值
-    $whatd %= 7;
     return $whatd;
 }
 
@@ -49,11 +48,16 @@ function WhatWeekday2($_y, $_m){
     for($i=0; $i<$_m-1; $i++){
         $whatd += $days[$i];
     }
-    $whatd += $_y + $_y/4 - $_y/100 + $_y/400 - 4;
 
-    $whatd += 7; // 避免負值
-    $whatd %= 7;
+    $whatd = ($_y-1+($_y-1)/4-($_y-1)/100+($_y-1)/400)%7;
+
+    for ($i=0; $i<($_m-1); $i++){
+        $whatd += $days[$i];
+    }
+    $whatd = ($whatd) % 7;
+
     return $whatd;
+
 }
 
 function WeekList(){
@@ -67,7 +71,10 @@ function WeekList(){
 
 function DayList($_y, $_m, $_d){
     $days=array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-    $weekday = WhatWeekday($_y, $_m);
+    if(IsLeapYear($_y)){
+        $days[1]+=1;
+    }
+    $weekday = WhatWeekday($_y, $_m, $_d);
     echo "<tr>";
     for($i=0; $i<$weekday; $i++){
         echo "<th>"." "."</th>";
@@ -93,15 +100,18 @@ function WeekList2(){
     echo "</tr>";
 }
 
-function DayList2($y, $m, $d){
+function DayList2($_y, $_m, $_d){
     $days=array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-    $weekday = WhatWeekday2($y, $m);
+    if(IsLeapYear($_y)){
+        $days[1]+=1;
+    }
+    $weekday = WhatWeekday2($_y, $_m);
     echo "<tr>";
     for($i=0; $i<$weekday; $i++){
         echo "<th>"." "."</th>";
     }
-    for($i=1, $count=$weekday+1; $i<=$days[$m-1]; $i++, $count++){
-        if($d==$i){
+    for($i=1, $count=$weekday+1; $i<=$days[$_m-1]; $i++, $count++){
+        if($_d==$i){
             echo "<th><font color='#ff4500'> " .$i. "</font></th>";
         }else{
             echo "<th>". $i ."</th>";
@@ -114,6 +124,9 @@ function DayList2($y, $m, $d){
 
 function Calendar($_y, $_m, $_d){
     $days=array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    if(IsLeapYear($_y)){
+        $days[1]+=1;
+    }
 
     if($_y&&$_m&&$_d){
         if($_y>0 && $_m>0 && $_m<13 && $_d>0 && $_d<=$days[$_m-1]){
