@@ -42,16 +42,16 @@ fclose($file);
 
     $fp = fopen("file.txt", "r+");
     if($fp){
-        $name = empty($_POST["name"])?$name: $_POST["name"]."\n";
-        $identity = empty($_POST["identity"])?$identity: $_POST["identity"]."\n";
+        $name = empty($_POST["name"])?$name: $_POST["name"];
+        $identity = empty($_POST["identity"])?$identity: $_POST["identity"];
         $birthday = empty($_POST["birthday"])?$birthday: $_POST["birthday"];
         $phone = empty($_POST["phone"])?$phone: $_POST["phone"];
-        $code = empty($_POST["code"])?$code: $_POST["code"]."\n";
+        $code = empty($_POST["code"])?$code: $_POST["code"];
         $address = empty($_POST["address"])?$address: $_POST["address"];
 
-        $birthday_b64 = base64_encode($birthday)."\n";
-        $phone_b64 = base64_encode($phone)."\n";
-        $address_b64 = base64_encode($address)."\n";
+        $birthday_b64 = base64_encode($birthday);
+        $phone_b64 = base64_encode($phone);
+        $address_b64 = base64_encode($address);
 
 
         echo $name."<br>".$identity."<br>".$birthday."<br>".$phone."<br>".$code."<br>".$address;
