@@ -2,43 +2,59 @@
 <html>
 <body>
 
-<?php
-
-$file = fopen("file.txt", "r");
-$x = 6;
-
-$ary=array();
-while (!feof($file) && $x!==0){
-    if($x===4 || $x===3 || $x===1){
-        $line = fgets($file);
-        $line = base64_decode($line);
-        array_push($ary, $line);
-    }else{
-        $line = fgets($file);
-        array_push($ary, $line);
-    }
-    $x--;
-}
-list($name, $identity, $birthday, $phone, $code, $address) = $ary;
-echo $name."<br>".$identity."<br>".$birthday."<br>".$phone."<br>".$code."<br>".$address;
-
-fclose($file);
-
-?>
 
 
-<div><br><br>刪除功能：</div>
-<div>說明：輸入與原資料相同即可刪除。</div>
+
+<h1>資料刪除</h1>
 <form action="train4-002.php" method="post">
-    <br>
-    姓名：<input type="text" name="name"><br>
-    身分證號：<input type="text" name="identity"><br>
-    生日：<input type="text" name="birthday"><br>
-    電話：<input type="text" name="phone"><br>
-    郵遞區號：<input type="text" name="code"><br>
-    住址：<input type="text" name="address"><br><br>
+    <p>檔案名稱：
+        <input type="text" name="fileName"><br>
+    </p>
+    <p>姓名：
+        <input type="text" name="name"><br>
+    </p>
+    <p>身分證號：
+        <input type="text" name="identity"><br>
+    </p>
+    <p>生日：
+        <input type="text" name="birthday"><br>
+    </p>
+    <p>電話：
+        <input type="text" name="phone"><br>
+    </p>
+    <p>郵遞區號：
+        <input type="text" name="code"><br>
+    </p>
+    <p>住址：
+        <input type="text" name="address"><br>
+    </p>
     <input type="submit" value="刪除">
 </form>
+
+
+<?php
+
+    $file = fopen("file.txt", "r");
+    $x = 6;
+
+    $ary=array();
+    while (!feof($file) && $x!==0){
+        if($x===4 || $x===3 || $x===1){
+            $line = fgets($file);
+            $line = base64_decode($line);
+            array_push($ary, $line);
+        }else{
+            $line = fgets($file);
+            array_push($ary, $line);
+        }
+        $x--;
+    }
+    list($name, $identity, $birthday, $phone, $code, $address) = $ary;
+    echo $name."<br>".$identity."<br>".$birthday."<br>".$phone."<br>".$code."<br>".$address;
+
+    fclose($file);
+
+?>
 
 <?php
 
