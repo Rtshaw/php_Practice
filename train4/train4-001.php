@@ -2,43 +2,60 @@
 <html>
 <body>
 
-<h1>資料修改</h1>
-<form action="train4-001.php" method="post">
-    <p>檔案名稱：
-        <input type="text" name="fileName"><br>
-    </p>
-    <p>姓名：
-        <input type="text" name="name"><br>
-    </p>
-    <p>身分證號：
-        <input type="text" name="identity"><br>
-    </p>
-    <p>生日：
-        <input type="text" name="birthday"><br>
-    </p>
-    <p>電話：
-        <input type="text" name="phone"><br>
-    </p>
-    <p>郵遞區號：
-        <input type="text" name="code"><br>
-    </p>
-    <p>住址：
-        <input type="text" name="address"><br>
-    </p>
-    <input type="submit" value="修改">
-</form>
-
-
 <?php
+
+    $file = fopen('file.txt', "rb");
+
+    $i = 1;
+    $C = 0;
+    $id = empty($_GET["id"]) ? '': $_GET["id"];
+    while ((!feof($file) && $line = trim(fgets($file)))){
+        $context = explode(';', $line);
+        if($id === trim($context[0])){
+            $id = trim($context[0]);
+        }else{
+            $C++;
+        }
+        $fileName[] = trim($context[0]);
+        $i++;
+    }
+    fclose($file);
+    if($C === count($fileName)){
+        header("location:train4-000.php");
+    }
+
+
+    echo "<h1>資料修改</h1>";
+    echo "<form action='train4-001.php?id=$id' method='post'>";
+    echo "<p>檔案名稱：";
+    echo '<input type="text" name="fileName" value="'.$id.'" disabled="disabled"><br>';
+    echo '</p>';
+    echo '<p>姓名：';
+    echo '<input type="text" name="name"><br>';
+    echo '</p>';
+    echo '<p>身分證號：';
+    echo '<input type="text" name="identity"><br>';
+    echo '</p>';
+    echo '<p>生日：';
+    echo '<input type="text" name="birthday"><br>';
+    echo '</p>';
+    echo '<p>電話：';
+    echo '<input type="text" name="phone"><br>';
+    echo '</p>';
+    echo '<p>郵遞區號：';
+    echo '<input type="text" name="code"><br>';
+    echo '</p>';
+    echo '<p>住址：';
+    echo '<input type="text" name="address"><br>';
+    echo '</p>';
+    echo '<input type="submit" value="修改">';
+    echo '</form>';
+
     echo "<br>";
 
 
 
     $Array = GetList("file.txt");
-
-//    for($i=0; $i<count($Array); $i++){
-//        echo "$Array[$i]<br>";
-//    }
 
     function GetList($_File){
 
@@ -60,7 +77,7 @@
     $file = fopen("file.txt", "a");
     $FullDataArray = file('file.txt');
     if($file){
-        $fileName = empty($_POST["fileName"]) ? '' : $_POST["fileName"];
+        $fileName = empty($_POST["fileName"]) ? $id : $_POST["fileName"];
 
 
         $j = 0;
@@ -70,8 +87,6 @@
 
         while ($j<count($Array)){
             if($fileName !== ''){
-
-
                 if($fileName === $Array[$j]){
                     $LineContent = explode(';', $FullDataArray[$j]);
 
@@ -95,7 +110,6 @@
                 }
             }else{
                 $FileNameEmptyCount++;
-//                echo "請輸入檔名";
             }
             $j++;
 
@@ -107,20 +121,33 @@
 
         $file = fopen("file.txt", "rb");
         $i = 1;
+        echo "<table border='1'>";
+        echo "<thead>";
+        echo "<tr>
+            <th>檔名</th>
+            <th>姓名</th>
+            <th>身份證號</th>
+            <th>生日</th>
+            <th>電話</th>
+            <th>郵遞區號</th>
+            <th>住址</th>
+          </tr></thead>";
+        echo "<tbody>";
+        echo "<tr>";
         while ((!feof($file) && $line = trim(fgets($file)))){
             $context = explode(';', $line);
-            echo '第'.$i.'筆 '."檔名 ".trim($context[0]).
-                " 姓名 ".trim($context[1]).
-                " 身份證號 ".trim($context[2]).
-                " 生日 ".trim(base64_decode($context[3])).
-                " 電話 ".trim(base64_decode($context[4])).
-                " 郵遞區號 ".trim($context[5]).
-                " 住址 ".trim(base64_decode($context[6])).
-                '<br>'
-            ;
+            echo "<td>".trim($context[0])."</td>";
+            echo "<td>".trim($context[1])."</td>";
+            echo "<td>".trim($context[2])."</td>";
+            echo "<td>".trim(base64_decode($context[3]))."</td>";
+            echo "<td>".trim(base64_decode($context[4]))."</td>";
+            echo "<td>".trim($context[5])."</td>";
+            echo "<td>".trim(base64_decode($context[6]))."</td>";
+            echo "<tr>";
             $i++;
         }
-        echo "<br>共".($i-1)."筆<br>";
+        echo "</tbody>";
+        echo "<br>共".($i-1)."筆<br><br>";
 
         fclose($file);
 
@@ -131,28 +158,6 @@
 
     }
 
-
-
-
-
-$file = fopen("file.txt", "r");
-$x = 6;
-
-$ary=array();
-while (!feof($file) && $x!==0){
-    if($x===4 || $x===3 || $x===1){
-        $line = fgets($file);
-        $line = base64_decode($line);
-        array_push($ary, $line);
-    }else{
-        $line = fgets($file);
-        array_push($ary, $line);
-    }
-    $x--;
-}
-list($name, $identity, $birthday, $phone, $code, $address) = $ary;
-
-fclose($file);
 
 ?>
 
